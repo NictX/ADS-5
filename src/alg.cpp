@@ -54,16 +54,34 @@ int eval(std::string pref) {
   int x, y = 0;
   int math = 0;
   while (i < post.length()) {
-    if (Imp(post[i]) == 10) {
+    int o = 4;
+    switch (post[i]) {
+      case '(': o = 0;
+      case ')': o = 1;
+      case '+': o = 2;
+      case '-': o = 2;
+      case '*': o = 3;
+      case '/': o = 3;
+      default: o = 4;
+    }
+    if (o == 4) {
       if (post[i] != ' ') {
         stack2.push(post[i] - '0');
       }
-    } else if (Imp(post[i]) < 4) {
+    } else if (o < 4) {
       x = stack1.get();
       stack2.pop();
       y = stack2.get();
       stack2.pop();
-      stack2.push(calcul(post[i], y, x));
+      int p = 10;
+      switch (post[i]) {
+        case '*': p = x * y;
+        case '/': p = x / y;
+        case '-': p = x - y;
+        case '+': p = x + y;
+        default: p = 10;
+      }
+      stack2.push(p);
     }
     i++;
   }
