@@ -5,7 +5,7 @@
 
 std::string infx2pstfx(std::string inf) {
   TStack<char, 20> stack1;
-  std::string post{};
+  std::string post;
   std::map<char, int> ci;
   ci['('] = 0;
   ci[')'] = 0;
@@ -48,7 +48,7 @@ std::string infx2pstfx(std::string inf) {
   return post;
 }
 
-int eval(std::string pref) {
+int eval(std::string post) {
   TStack<int, 50> stack2;
   int i = 0;
   int x, y = 0;
