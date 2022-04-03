@@ -5,7 +5,7 @@
 
 std::string infx2pstfx(std::string inf) {
   TStack<char, 20> stack1;
-  std::string post;
+  std::string post{};
   std::map<char, int> ci;
   ci['('] = 0;
   ci[')'] = 0;
