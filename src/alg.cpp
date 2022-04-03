@@ -69,7 +69,7 @@ int eval(std::string pref) {
         stack2.push(post[i] - '0');
       }
     } else if (o < 4) {
-      x = stack1.get();
+      x = stack2.get();
       stack2.pop();
       y = stack2.get();
       stack2.pop();
