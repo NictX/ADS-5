@@ -15,7 +15,7 @@ class TStack {
   void pop() {
     if (top >= 0) top--;
   }
-  void push(type item) {
+  void push(T item) {
     if (top < size - 1) arr[++top] = item;
   }
 };
