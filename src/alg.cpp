@@ -54,7 +54,7 @@ int eval(std::string post) {
   int x, y = 0;
   int math = 0;
   while (i < post.length()) {
-    int o = 4;
+    int o;
     switch (post[i]) {
       case '(': o = 0;
       case ')': o = 1;
@@ -62,9 +62,9 @@ int eval(std::string post) {
       case '-': o = 2;
       case '*': o = 3;
       case '/': o = 3;
-      default: o = 4;
+      default: o = 10;
     }
-    if (o == 4) {
+    if (o == 10) {
       if (post[i] != ' ') {
         stack2.push(post[i] - '0');
       }
@@ -73,12 +73,12 @@ int eval(std::string post) {
       stack2.pop();
       y = stack2.get();
       stack2.pop();
-      int p = 10;
+      int p;
       switch (post[i]) {
-        case '*': p = x * y;
-        case '/': p = x / y;
-        case '-': p = x - y;
-        case '+': p = x + y;
+        case '*': p = y * x;
+        case '/': p = y / x;
+        case '-': p = y - x;
+        case '+': p = y + x;
         default: p = 10;
       }
       stack2.push(p);
