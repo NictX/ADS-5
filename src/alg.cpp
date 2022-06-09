@@ -30,7 +30,7 @@ int calculate(char i, int a, int b) {
 std::string infx2pstfx(std::string inf) {
   TStack<char, 20> stack1;
   std::string post;
-  for (int i = 0 : i<inf.size(); i++) {
+  for (int i = 0; i < inf.size(); i++) {
     if (priority(inf[i]) == 5) {
       post += inf[i];
       post += ' ';
