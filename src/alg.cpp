@@ -3,39 +3,51 @@
 #include <map>
 #include "tstack.h"
 
+int priority(char i) {
+    switch (i) {
+        case '(': return 0;
+        case ')': return 1;
+        case '+': return 2;
+        case '-': return 2;
+        case '*': return 3;
+        case '/': return 3;
+        case ' ': return 4;
+        default : return 5;
+    }
+}
+
+int calculate(char i, int a, int b) {
+      switch (i) {
+        case '+': return b + a;
+        case '-': return b - a;
+        case '*': return b * a;
+        case '/':
+        if ( a != 0) return b / a;
+        default : return 0;
+    }
+}
+
 std::string infx2pstfx(std::string inf) {
   TStack<char, 20> stack1;
   std::string post;
-  std::map<char, int> ci;
-  ci['('] = 0;
-  ci[')'] = 0;
-  ci['+'] = 1;
-  ci['-'] = 1;
-  ci['*'] = 2;
-  ci['/'] = 2;
-  for (char i : inf) {
-    if (ci.find(i) == ci.end()) {
-      post += i;
+  for (int i = 0 : i<inf.size(); i++) {
+    if (priority(inf[i]) == 5) {
+      post += inf[i];
       post += ' ';
     } else {
-      if (i == ')') {
-        while (stack1.get() != '(') {
+      if (priority(inf[i]) == 0) {
+        stack1.push(inf[i]);
+      } else if (stack1.isEmpty()) {
+        stack1.push(inf[i]);
+      } else if (priority(inf[i]) > priority(stack1.get())) {
+        stack1.push(inf[i]);
+      } else if (priority(inf[i]) == 1){
+        while (priority(stack1.get()) != 0) {
           post += stack1.get();
           post += ' ';
           stack1.pop();
         }
-        stack1.pop();
-      } else if (ci[i] > ci[stack1.get()]) {
-        stack1.push(i);
-      } else if (i == '(' || stack1.isEmpty()) {
-        stack1.push(i);
-      } else {
-        while (ci[stack1.get()] >= ci[i] && !stack1.isEmpty()) {
-          post += stack1.get();
-          post += ' ';
-          stack1.pop();
-        }
-        stack1.push(i);
+        stack1.push(inf[i]);
       }
     }
   }
@@ -50,40 +62,17 @@ std::string infx2pstfx(std::string inf) {
 
 int eval(std::string post) {
   TStack<int, 50> stack2;
-  int i = 0;
-  int x, y = 0;
   int math = 0;
-  while (i < post.length()) {
-    int o;
-    switch (post[i]) {
-      case '(': o = 0;
-      case ')': o = 1;
-      case '+': o = 2;
-      case '-': o = 2;
-      case '*': o = 3;
-      case '/': o = 3;
-      default: o = 10;
-    }
-    if (o == 10) {
-      if (post[i] != ' ') {
-        stack2.push(post[i] - '0');
-      }
-    } else if (o < 4) {
-      x = stack2.get();
+  for (int i = 0; i < post.size(); i++) {
+    if (priority(post[i]) == 5) {
+      stack2.push(post[i] - '0');
+    } else if (priority(post[i]) < 4) {
+      int x = stack2.get();
       stack2.pop();
-      y = stack2.get();
+      int y = stack2.get();
       stack2.pop();
-      int p;
-      switch (post[i]) {
-        case '*': p = y * x;
-        case '/': p = y / x;
-        case '-': p = y - x;
-        case '+': p = y + x;
-        default: p = 10;
-      }
-      stack2.push(p);
+      stack2.push(calculate(post[i], x, y));
     }
-    i++;
   }
   math = stack2.get();
   return math;
